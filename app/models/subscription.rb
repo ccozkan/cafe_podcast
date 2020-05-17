@@ -3,6 +3,4 @@ class Subscription < ApplicationRecord
   has_many :contents
 
   validates :url, presence: true
-
-
 end
