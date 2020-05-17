@@ -30,6 +30,9 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 # cafe_podcast
 gem 'devise'
+gem 'feedjira'
+gem 'httparty'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -41,6 +44,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
+  gem 'shoulda-matchers'
 end
 
 group :development do
