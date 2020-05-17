@@ -11,24 +11,24 @@ class User < ApplicationRecord
 
   def self.update_contents(user)
     subscriptions = Subscription.where(user_id: user.id)
-    subscriptions.each do |s|
-      feed_url = s.url
+    subscriptions.each do |subscription|
+      feed_url = subscription.url
       xml = HTTParty.get(feed_url).body
-      feed = Feedjira.parse(xml)
+      feed = Feedjira.parse(xml, parser: Feedjira::Parser::ITunesRSS)
+      feed_class = feed.class
 
       contents = feed.entries
-      contents.each do |c|
-        title = c.title
-        summary = c.summary
-        entry_id = c.entry_id
-        url = c.enclosure_url
-        publish_date = c.published.to_date
-        # TODO: convert publish_date in database to simply date
-        # - in subscripton model
-        # - in content model
+      contents.each do |content|
+        title = content.title
+        summary = content.itunes_summary
+        entry_id = content.entry_id
+        url = content.enclosure_url
+        publish_date = content.published.to_date
+        keywords = content.itunes_keywords
 
-        time = (c.enclosure_length.to_i / 1024.0) / 16.0
+        time = (content.enclosure_length.to_i / 1024.0) / 16.0
         duration = (time / 60).ceil
+
         # TODO: Better alternative to duration calculation
         # enclosure_length to minutes
         # might not be most accurate
@@ -37,11 +37,11 @@ class User < ApplicationRecord
         # but how about other providers?
         # duration is an integer in db
 
-        unless Content.where(entry_id: c.entry_id, user_id: s.user_id).empty?
+        unless Content.where(entry_id: content.entry_id, user_id: subscription.user_id).empty?
           next
         end
 
-        new_content = Content.new(subscription_id: s.id,
+        new_content = Content.new(subscription_id: subscription.id,
                                   user_id: user.id,
                                   title: title,
                                   duration: duration,
@@ -52,12 +52,12 @@ class User < ApplicationRecord
         new_content.save!
       end
 
-      s.last_publish_date = s.contents.map(&:publish_date).max
-      s.name = feed.title
-      s.description = feed.description
+      subscription.last_publish_date = subscription.contents.map(&:publish_date).max
+      subscription.name = feed.title
+      subscription.description = feed.description
       # TODO: description is needed? or provided?
 
-      s.save!
+      subscription.save!
     end
   end
 end
