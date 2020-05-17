@@ -9,6 +9,23 @@ class User < ApplicationRecord
   has_many :subscriptions
   has_many :contents, through: :subscriptions
 
+  def self.search_podcasts(search_terms)
+    url = "https://itunes.apple.com/search?term=#{search_terms}&entity=podcast"
+    response = HTTParty.get(url, headers: { "Accept" => "application/json" }, format: :json)
+
+    if response.code == 200
+      results = []
+      response['results'].each do |r|
+        result = {}
+        result['url'] = r['feedUrl']
+        result['media_url'] = r['artworkUrl600']
+        result['categories'] = r['genres']
+        results << result
+      end
+      results
+    end
+  end
+
   def self.update_contents(user)
     subscriptions = Subscription.where(user_id: user.id)
     subscriptions.each do |subscription|
