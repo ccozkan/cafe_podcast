@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_17_145724) do
+ActiveRecord::Schema.define(version: 2020_05_17_223838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,25 +21,28 @@ ActiveRecord::Schema.define(version: 2020_05_17_145724) do
     t.text "summary"
     t.date "publish_date"
     t.integer "duration"
-    t.boolean "listened"
-    t.boolean "starred"
+    t.boolean "listened", default: false
+    t.boolean "starred", default: false
     t.string "entry_id"
     t.bigint "subscription_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "keywords", default: [], array: true
     t.index ["subscription_id"], name: "index_contents_on_subscription_id"
     t.index ["user_id"], name: "index_contents_on_user_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
     t.string "name"
+    t.text "description"
     t.string "url"
     t.string "media_url"
-    t.datetime "last_publish"
+    t.date "last_publish_date"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "categories", default: [], array: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
