@@ -6,8 +6,8 @@ class CreateContents < ActiveRecord::Migration[6.0]
       t.text :summary
       t.date :publish_date
       t.integer :duration
-      t.boolean :listened
-      t.boolean :starred
+      t.boolean :listened, default: false
+      t.boolean :starred, default: false
       t.string :entry_id
       t.references :subscription, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
