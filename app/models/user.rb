@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -35,21 +37,24 @@ class User < ApplicationRecord
         # but how about other providers?
         # duration is an integer in db
 
-        if Content.where(entry_id: c.entry_id, user_id: s.user_id).empty?
-          new_content = Content.new(subscription_id: s.id,
-                                    user_id: user.id,
-                                    title: title,
-                                    url: url,
-                                    summary: summary,
-                                    entry_id: entry_id,
-                                    publish_date: publish_date
-                     )
-          new_content.save!
+        unless Content.where(entry_id: c.entry_id, user_id: s.user_id).empty?
+          next
         end
+
+        new_content = Content.new(subscription_id: s.id,
+                                  user_id: user.id,
+                                  title: title,
+                                  duration: duration,
+                                  url: url,
+                                  summary: summary,
+                                  entry_id: entry_id,
+                                  publish_date: publish_date)
+        new_content.save!
       end
 
-      s.last_publish = s.contents.map(&:publish_date).max
+      s.last_publish_date = s.contents.map(&:publish_date).max
       s.name = feed.title
+      s.description = feed.description
       # TODO: description is needed? or provided?
 
       s.save!
