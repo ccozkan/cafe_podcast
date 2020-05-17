@@ -11,18 +11,31 @@ RSpec.describe Content, type: :model do
     end
   end
 
-  describe '' do
+  describe 'update_contents method' do
     let!(:user) { FactoryBot.create(:user) }
-    let!(:subscription) { FactoryBot.create(:subscription, user_id: user.id, url: 'https://feed.podbean.com/podcast.fularsizentellik.com/feed.xml') }
+    let!(:subscription_1) { FactoryBot.create(:subscription, user_id: user.id, url: 'https://feed.podbean.com/podcast.fularsizentellik.com/feed.xml') }
+    let!(:subscription_2) { FactoryBot.create(:subscription, user_id: user.id, url: "http://joeroganexp.joerogan.libsynpro.com/rss" ) }
+    let!(:subscription_3) { FactoryBot.create(:subscription, user_id: user.id, url: 'https://feeds.feedburner.com/ReverberationRadio') }
 
     before do
       User.update_contents(user)
     end
 
-    it '' do
-      expect(Content.where(user_id: user.id, subscription_id: subscription.id).empty?).to eq(false)
+    it 'should update contents' do
+      expect(Content.where(user_id: user.id, subscription_id: subscription_1.id).empty?).to eq(false)
+      expect(Content.where(user_id: user.id, subscription_id: subscription_2.id).empty?).to eq(false)
+      expect(Content.where(user_id: user.id, subscription_id: subscription_3.id).empty?).to eq(false)
     end
   end
-  User.destroy_all
+
+  describe 'asd' do
+    it 'asd' do
+      results = User.search_podcasts('joe rogan')
+      results = User.search_podcasts('reverberation radio')
+      expect(results.length).to be > 0
+    end
+
+  end
+  #User.destroy_all
 end
 
