@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :subscription do
-    name { "MyString" }
-    url { "MyString" }
-    media_url { "MyString" }
-    last_publish { "2020-05-17 17:38:43" }
+    name { "cool podcast" }
+    url { "https://feed.coolpodcast.test" }
+    media_url { "https://coolpodcast.test/thumbnail" }
+    last_publish { Date.today - 1.day }
     user { nil }
   end
 end
