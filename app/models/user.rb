@@ -19,55 +19,50 @@ class User < ApplicationRecord
 
     results = []
     response['results'].each do |r|
-      result = {}
-      result['url'] = r['feedUrl']
-      result['media_url'] = r['artworkUrl600']
-      result['categories'] = r['genres']
+      result = { 'url': r['feedUrl'],
+                 'media_url': r['artworkUrl600'],
+                 'categories': r['genres'] }
       results << result
     end
     results
   end
 
   def self.update_contents(user)
-    subscriptions = Subscription.where(user_id: user.id)
-    subscriptions.each do |s|
-      feed_url = s.url
-      xml = HTTParty.get(feed_url).body
-      feed = Feedjira.parse(xml, parser: Feedjira::Parser::ITunesRSS)
-
-      contents = feed.entries
-      contents.each do |c|
-        title = c.title
-        summary = c.itunes_summary
-        entry_id = c.entry_id
-        url = c.enclosure_url
-        publish_date = c.published.to_date
-        keywords = c.itunes_keywords
-
-        time = (c.enclosure_length.to_i / 1024.0) / 16.0
-        duration = (time / 60).ceil
-
-        unless Content.where(entry_id: c.entry_id,
-                             user_id: s.user_id).empty?
-          next
+    user.subscriptions.each do |s|
+      feed = get_feed(s.url)
+      feed.entries.each do |c|
+        if Content.where(entry_id: c.entry_id,
+                         user_id: s.user_id).empty?
+          save_contents(s, c)
         end
-
-        new_content = Content.new(subscription_id: s.id,
-                                  user_id: user.id,
-                                  title: title,
-                                  duration: duration,
-                                  url: url,
-                                  summary: summary,
-                                  entry_id: entry_id,
-                                  keywords: keywords,
-                                  publish_date: publish_date)
-        new_content.save!
       end
-
-      s.last_publish_date = s.contents.map(&:publish_date).max
-      s.name = feed.title
-      s.description = feed.description
-      s.save!
+      update_subscription(s, feed)
     end
+  end
+
+
+  def self.get_feed(url)
+    xml = HTTParty.get(url).body
+    Feedjira.parse(xml, parser: Feedjira::Parser::ITunesRSS)
+  end
+
+  def self.update_subscription(sub, feed)
+    sub.last_publish_date = sub.contents.map(&:publish_date).max
+    sub.name = feed.title
+    sub.description = feed.description
+    sub.save!
+  end
+
+  def self.save_contents(sub, con)
+    content = Content.new(subscription_id: sub.id,
+                          user_id: sub.user_id,
+                          title: con.title,
+                          duration: con.enclosure_length.to_i / 983_040 + 1,
+                          url: sub.url,
+                          summary: con.itunes_summary,
+                          entry_id: con.entry_id,
+                          keywords: con.itunes_keywords,
+                          publish_date: con.published)
+    content.save!
   end
 end
