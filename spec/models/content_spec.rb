@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Content, type: :model do
-  describe 'bla' do
+  describe 'model consistency' do
     let!(:user) { FactoryBot.create(:user) }
     let!(:subscription) { FactoryBot.create(:subscription, user_id: user.id) }
     let!(:content) { FactoryBot.create(:content, user_id: user.id, subscription_id: subscription.id) }
@@ -11,14 +11,14 @@ RSpec.describe Content, type: :model do
     end
   end
 
-  describe 'update_contents method' do
+  describe 'update_podcasts method' do
     let!(:user) { FactoryBot.create(:user) }
     let!(:subscription_1) { FactoryBot.create(:subscription, user_id: user.id, url: 'https://feed.podbean.com/podcast.fularsizentellik.com/feed.xml') }
     let!(:subscription_2) { FactoryBot.create(:subscription, user_id: user.id, url: "http://joeroganexp.joerogan.libsynpro.com/rss" ) }
     let!(:subscription_3) { FactoryBot.create(:subscription, user_id: user.id, url: 'https://feeds.feedburner.com/ReverberationRadio') }
 
     before do
-      User.update_contents(user)
+      User.update_subscribed_podcasts(user)
     end
 
     it 'should update contents' do
@@ -28,9 +28,10 @@ RSpec.describe Content, type: :model do
     end
   end
 
-  describe 'asd' do
-    it 'asd' do
+  describe 'search_podcasts method' do
+    it 'should find some shows' do
       results = User.search_podcasts('joe rogan')
+      expect(results.length).to be > 0
       results = User.search_podcasts('reverberation radio')
       expect(results.length).to be > 0
     end
