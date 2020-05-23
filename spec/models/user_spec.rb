@@ -1,5 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'model consistency' do
+    context '#validations' do
+      it { is_expected.to have_many(:subscriptions) }
+      it { is_expected.to have_many(:contents).through(:subscriptions) }
+    end
+  end
 end
