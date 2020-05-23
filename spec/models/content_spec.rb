@@ -2,16 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Content, type: :model do
   describe 'model consistency' do
-    let!(:user) { FactoryBot.create(:user) }
-    let!(:subscription) { FactoryBot.create(:subscription, user_id: user.id) }
-    let!(:content) { FactoryBot.create(:content, user_id: user.id, subscription_id: subscription.id) }
-
     context '#validations' do
       it { is_expected.to validate_presence_of(:url) }
     end
   end
 
-  describe 'update_podcasts method' do
+  describe 'Updating subscribed podcasts' do
     let!(:user) { FactoryBot.create(:user) }
     let!(:subscription_1) { FactoryBot.create(:subscription, user_id: user.id, url: 'https://feed.podbean.com/podcast.fularsizentellik.com/feed.xml') }
     let!(:subscription_2) { FactoryBot.create(:subscription, user_id: user.id, url: "http://joeroganexp.joerogan.libsynpro.com/rss" ) }
