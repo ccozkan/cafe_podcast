@@ -27,16 +27,5 @@ RSpec.describe Content, type: :model do
       expect(Content.where(user_id: user.id, subscription_id: subscription_3.id).empty?).to eq(false)
     end
   end
-
-  describe 'search_podcasts method' do
-    it 'should find some shows' do
-      results = User.search_podcasts('joe rogan')
-      expect(results.length).to be > 0
-      results = User.search_podcasts('reverberation radio')
-      expect(results.length).to be > 0
-    end
-
-  end
-  #User.destroy_all
 end
 
