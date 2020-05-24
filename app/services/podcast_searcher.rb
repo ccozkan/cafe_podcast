@@ -27,6 +27,7 @@ class PodcastSearcher
 
   def ascii_only_failsafe
     @query = @query.encode('ASCII', invalid: :replace, undef: :replace, replace: "_")
+    # do i really need that though?
   end
 
   def remove_unwanted
@@ -36,6 +37,7 @@ class PodcastSearcher
     @query = @query.gsub("'", ' ')
     # TODO:
     # make it nicer
+    # do i really need that though?
   end
 
   def send_request
