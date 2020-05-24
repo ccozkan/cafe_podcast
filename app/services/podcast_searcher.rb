@@ -5,6 +5,8 @@ class PodcastSearcher
 
   def initialize(query, user)
     @query = query
+    remove_unwanted
+    ascii_only
     @user = user
   end
 
@@ -17,6 +19,24 @@ class PodcastSearcher
   end
 
   private
+
+  def ascii_only
+    @query = Ascii.process(@query)
+    ascii_only_failsafe
+  end
+
+  def ascii_only_failsafe
+    @query = @query.encode('ASCII', invalid: :replace, undef: :replace, replace: "_")
+  end
+
+  def remove_unwanted
+    @query = @query.gsub('\\', '')
+    @query = @query.gsub('/', '')
+    @query = @query.gsub('"', ' ')
+    @query = @query.gsub("'", ' ')
+    # TODO:
+    # make it nicer
+  end
 
   def send_request
     url = "https://itunes.apple.com/search?term=#{@query}&entity=podcast"
