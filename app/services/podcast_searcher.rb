@@ -1,17 +1,21 @@
 # frozen_string_literal: true
 
 class PodcastSearcher
-  attr_reader :query
+  attr_reader :query, :user
 
   def initialize(query, user)
     @query = query
-    remove_unwanted
-    ascii_only
     @user = user
   end
 
   def call
-    receive_results
+    unless @query.nil?
+      remove_unwanted
+      ascii_only
+      receive_results
+    else
+      []
+    end
     # results = receive_results
     # TODO:
     # DO STUFF
@@ -54,8 +58,11 @@ class PodcastSearcher
     response = send_request
     results = []
     response['results'].each do |r|
+      r['genres'].try(:delete, 'Podcasts')
       result = { 'url': r['feedUrl'],
                  'media_url': r['artworkUrl600'],
+                 'provider': r['artistName'],
+                 'name': r['trackName'],
                  'categories': r['genres'] }
       results << result
     end
