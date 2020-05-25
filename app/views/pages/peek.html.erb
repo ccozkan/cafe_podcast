@@ -1,0 +1,9 @@
+<%= @peek.each do |e| %>
+    <%= e[:title] %>
+    <hr/>
+    <%= e[:summary] %>
+    <hr/>
+    <%= e[:duration].to_s + 'mins' %>
+    <hr/>
+    <% end %>
+

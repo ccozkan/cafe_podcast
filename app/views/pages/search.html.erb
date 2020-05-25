@@ -1,0 +1,23 @@
+<div class="container">
+    <h2>search</h2>
+
+    <%= form_tag(search_page_path, method: :get) do %>
+        <%= text_field_tag(:query, params[:query]) %>
+    <% end %>
+    <hr/>
+
+    <% @search.each do |s| %>
+        <%= image_tag s[:media_url], class: "img-thumbnail", size: "200x200" %>
+        <h4>
+        <%= s[:name] %>
+        </h4>
+        <h5>
+            <%= s[:provider] %>
+        </h5>
+        <%= s[:categories] %>
+        <%= button_to "sneak👀", peek_path, method: :post, params: { url: s[:url] } %>
+        <%= link_to "Add Friend", {:controller => :subscriptions, :action => :create, :url => s[:url] }, :method => :post %> 
+        <hr/>
+    <% end %>
+
+</div>
