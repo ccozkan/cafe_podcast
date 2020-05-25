@@ -5,16 +5,22 @@ module UpdatePodcasts
 
   class_methods do
 
-    def update_subscribed_podcasts(user)
-      user.subscriptions.each do |s|
+    def update_subscribed_podcasts(user, specific_sub_url='')
+      if specific_sub_url.empty?
+        subs = user.subscriptions
+      else
+        subs = user.subscriptions.where(url: specific_sub_url)
+      end
+
+      subs.each do |s|
         feed = get_feed(s.url)
         feed.entries.each do |c|
           if Content.where(entry_id: c.entry_id,
                            user_id: s.user_id).empty?
             save_contents(s, c)
           end
-          update_subscription(s, feed)
         end
+        update_subscription(s, feed)
       end
     end
 
