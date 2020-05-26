@@ -1,0 +1,5 @@
+periodical_podcast_updater_worker:
+  description: 'Podcasts(subscription) information and episodes(content) gets updated every hour.'
+  cron: "0 * * * *"
+  class: "PeriodicalPodcastUpdaterWorker"
+  queue: periodical_podcast_updater_worker

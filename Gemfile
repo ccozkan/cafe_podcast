@@ -21,6 +21,7 @@ gem 'ascii'
 gem 'bootstrap'
 gem 'plyr-rails'
 gem 'sidekiq'
+gem 'sidekiq-cron'
 gem 'activeadmin'
 
 
