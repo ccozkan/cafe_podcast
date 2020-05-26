@@ -14,12 +14,14 @@ module UpdatePodcasts
 
       subs.each do |s|
         feed = get_feed(s.url)
+        next if feed.entries.length == user.subscriptions.find_by(url: s.url).try(:number_of_episodes)
+
         feed.entries.each do |c|
-          if Content.where(entry_id: c.entry_id,
-                           user_id: s.user_id).empty?
+          if user.subscriptions.find_by(id: s.id).contents.find_by(entry_id: c.entry_id).nil?
             save_contents(s, c)
           end
         end
+
         update_subscription(s, feed)
       end
     end
@@ -33,6 +35,7 @@ module UpdatePodcasts
       sub.last_publish_date = sub.contents.map(&:publish_date).max
       sub.name = feed.title
       sub.description = feed.description
+      sub.number_of_episodes = feed.entries.length
       sub.save!
     end
 
