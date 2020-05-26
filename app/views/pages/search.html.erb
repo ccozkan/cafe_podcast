@@ -15,8 +15,9 @@
             <%= s[:provider] %>
         </h5>
         <%= s[:categories] %>
-        <%= button_to "sneak👀", peek_path, method: :post, params: { url: s[:url] } %>
-        <%= link_to "Add Friend", {:controller => :subscriptions, :action => :create, :url => s[:url] }, :method => :post %> 
+        <%= button_to "subscribe", {:controller => :subscriptions, :action => :create, :url => s[:url] }, :method => :post, class: "btn btn-primary" %> 
+        <br/>
+        <%= button_to "sneak👀", peek_path, method: :post, params: { url: s[:url], }, class: "btn btn-info" %>
         <hr/>
     <% end %>
 
