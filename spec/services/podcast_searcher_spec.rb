@@ -27,6 +27,7 @@ RSpec.describe PodcastSearcher, type: :service do
 
       it 'should remove unwnted characters' do
         p = PodcastSearcher.new('\bla"\'', user)
+        results = p.call
         expect(p.query).to eq('bla')
       end
   end
