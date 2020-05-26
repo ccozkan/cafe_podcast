@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2020_05_17_223838) do
     t.string "url"
     t.string "media_url"
     t.date "last_publish_date"
+    t.integer "number_of_episodes"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
