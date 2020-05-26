@@ -7,6 +7,14 @@ class PagesController < ApplicationController
     @peek = SneakPeeker.new(pages_params['url']).call
   end
 
+  def about
+    # TODO
+  end
+
+  def contact
+    # TODO
+  end
+
   private
 
   def pages_params
