@@ -25,7 +25,8 @@ class SneakPeeker
   def parse_feed
     feed = get_feed
     results = []
-    feed.entries.each do |con|
+    first_entries = feed.entries[0...10]
+    first_entries.each do |con|
       result = { title: con.title,
                  duration: con.enclosure_length.to_i / 983_040 + 1,
                  summary: con.itunes_summary,
@@ -35,6 +36,4 @@ class SneakPeeker
     end
     results
   end
-
-
 end
