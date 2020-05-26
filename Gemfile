@@ -17,6 +17,11 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'devise'
 gem 'feedjira'
 gem 'httparty'
+gem 'ascii'
+gem 'bootstrap'
+gem 'plyr-rails'
+gem 'sidekiq'
+gem 'activeadmin'
 
 
 group :development, :test do
