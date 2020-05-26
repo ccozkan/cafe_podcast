@@ -1,13 +1,13 @@
 class Subscription < ApplicationRecord
-  belongs_to :user, dependent: :destroy
-  has_many :contents
+  belongs_to :user
+  has_many :contents, dependent: :destroy
 
   validates :url, presence: true
   validates :url, uniqueness: { scope: :user,
                                      message: "user podcast is already subscribed"}
-  after_create :first_time_run
+  after_commit :first_time_run, on: :create
 
   def first_time_run
-    User.update_subscribed_podcasts(user, url)
+    MyWorker.perform_async(user.id, url)
   end
 end
