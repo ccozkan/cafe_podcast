@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SubscriptionsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     @subscriptions = current_user.subscriptions
   end
@@ -21,12 +23,19 @@ class SubscriptionsController < ApplicationController
   end
 
   def subscription_params
-    params.permit(:url, :authenticity_token)
+    params.permit(:url)
   end
 
   def destroy
     @subscription = Subscription.find(params[:id])
     @subscription.destroy
     redirect_to subscriptions_path
+  end
+
+  def show
+    # TODO:
+    # add pagination
+    @subscription = current_user.subscriptions.find_by(id: params[:id])
+    @contents = @subscription.contents.reverse
   end
 end
