@@ -3,31 +3,43 @@
         <%= @subscription.name %>
     </h2>
 
-    <audio id="player" controls>
-        <source src="/path/to/audio.ogg" type="audio/ogg">
-        <source src="https://traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/6081eee7-c459-4e12-a1ab-aadc000fc4a7/c25576b7-0bbb-45c8-9aa9-abc600f87144/audio.mp3?utm_source=Podcast&in_playlist=413a6904-4d72-4be8-9421-aadc000fc4ba" type="audio/mp3" />
-    </audio>
+    <% current_page = request.params['page'] %>>
+    <%= button_to "<- Previous Page", request.params.merge( page: current_page.to_i - 1 ) if !current_page.nil? && current_page.to_i > 1%>
+    <%= link_to "Next Page->", request.params.merge( page: current_page.to_i + 1 ) %>
 
 
 
-<% @contents.each do |c| %>
-    <h3>
-        <%= c.title%> 
-    </h3>
-    <h5>
-        <%= c.duration%> mins
-    </h5>
-    <%= c.summary%>
-    <%= c.publish_date%>
-    <%= c.keywords%>
-    <%= c.url%>
-    <audio id="player" controls>
-        <source src=<%=c.url %> type="audio/mp3">
-    </audio>
+    <% @contents.each do |c| %>
+        <h3>
+            <%= c.title%> 
+        </h3>
+        <h5>
+            <%= c.duration%> mins
+        </h5>
+        <%= c.summary%>
+        <%= c.publish_date%>
+        <%= c.keywords%>
+        <%= c.url%>
 
-    <%= audio_tag c.url %>
+        <%= radio_button_tag(:episode_url, c.url, class: 'play_now') %>
+        <label for=".play_now" id="level_4_label" class="btn btn-primary">play</label>
+        <hr/>
+    <% end %>
 
+    <% current_page = request.params['page'] %>
+    <% current_page = 1 if request.params['page'].nil? %>
+    <%= link_to "Next Page>", request.params.merge( page: current_page.to_i + 1 ),  class: 'pagination_link' %>
+    <%= link_to "<Previous Page", request.params.merge( page: current_page.to_i - 1 ), class: 'pagination_link' if !current_page.nil? && current_page.to_i > 1%>
     <hr/>
-<% end %>
+    <br/>
+    <br/>
+    <br/>
+    <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
+        <div clas='align-center'>
+            <audio id="player" controls>
+                <source src="https://traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/6081eee7-c459-4e12-a1ab-aadc000fc4a7/c25576b7-0bbb-45c8-9aa9-abc600f87144/audio.mp3?utm_source=Podcast&in_playlist=413a6904-4d72-4be8-9421-aadc000fc4ba" />
+            </audio>
+        </div>
+    </nav>
 
 </div>
