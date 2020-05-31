@@ -4,7 +4,7 @@ class FeedReceiver
   def self.call(url)
     xml = HTTParty.get(url).body
     feed = Feedjira.parse(xml, parser: Feedjira::Parser::ITunesRSS)
-    feed.entries.sort_by!(&:published)
+    feed.entries.sort_by!(&:published).reverse!
     feed
   end
 end
