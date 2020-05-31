@@ -5,30 +5,28 @@ module UpdatePodcasts
 
   class_methods do
 
-    def update_subscribed_podcasts(user, specific_sub_url='')
+    def subs(user, specific_sub_url)
       if specific_sub_url.empty?
-        subs = user.subscriptions
+        user.subscriptions
       else
-        subs = user.subscriptions.where(url: specific_sub_url)
-      end
-
-      subs.each do |s|
-        feed = get_feed(s.url)
-        next if feed.entries.length == user.subscriptions.find_by(url: s.url).try(:number_of_episodes)
-
-        feed.entries.each do |c|
-          if user.subscriptions.find_by(id: s.id).contents.find_by(entry_id: c.entry_id).nil?
-            save_contents(s, c)
-          end
-        end
-
-        update_subscription(s, feed)
+        user.subscriptions.where(url: specific_sub_url)
       end
     end
 
-    def get_feed(url)
-      xml = HTTParty.get(url).body
-      Feedjira.parse(xml, parser: Feedjira::Parser::ITunesRSS)
+    def update_subscribed_podcasts(user, specific_sub_url = '')
+      subs(user, specific_sub_url).each do |s|
+        feed = FeedReceiver.call(s.url)
+        next if feed.entries.length == user.subscriptions.find_by(url: s.url)
+                                           .try(:number_of_episodes)
+
+        feed.entries.each do |c|
+          if user.subscriptions.find_by(id: s.id).contents
+                 .find_by(entry_id: c.entry_id).nil?
+            save_contents(s, c)
+          end
+        end
+        update_subscription(s, feed)
+      end
     end
 
     def update_subscription(sub, feed)
@@ -40,16 +38,10 @@ module UpdatePodcasts
     end
 
     def save_contents(sub, con)
-      content = Content.new(subscription_id: sub.id,
-                            user_id: sub.user_id,
-                            title: con.title,
-                            duration: con.enclosure_length.to_i / 983_040 + 1,
-                            url: sub.url,
-                            summary: con.itunes_summary,
-                            entry_id: con.entry_id,
-                            keywords: con.itunes_keywords,
-                            publish_date: con.published)
+      content = Content.new(FeedParser.call(con))
+      content.subscription_id = sub.id
+      content.user_id = sub.user_id
       content.save!
     end
   end
- end
+end

@@ -8,31 +8,23 @@ class SneakPeeker
   end
 
   def call
-    get_feed
-    response = parse_feed
-    if response.nil?
-      return []
-    else
-      return response
-    end
+    db_source = Subscription.find_by(url: @url)
+    return db_source.contents[-10..-1] if !db_source.nil? && db_source.length > 0
+
+    response = web_source
+    return [] if response.nil?
+
+    response
   end
 
-  def get_feed
-    xml = HTTParty.get(@url).body
-    Feedjira.parse(xml, parser: Feedjira::Parser::ITunesRSS)
-  end
+  # TODO: use sneakpeeker as worker
 
-  def parse_feed
-    feed = get_feed
+  def web_source
+    feed = FeedReceiver.call(@url)
     results = []
     first_entries = feed.entries[0...10]
     first_entries.each do |con|
-      result = { title: con.title,
-                 duration: con.enclosure_length.to_i / 983_040 + 1,
-                 summary: con.itunes_summary,
-                 keywords: con.itunes_keywords,
-                 publish_date: con.published }
-      results << result
+      results << FeedParser.call(con)
     end
     results
   end
