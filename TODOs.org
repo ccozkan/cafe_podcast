@@ -1,23 +1,45 @@
+#+TAGS: improv bugfix enhanc featur
+#+TODO: TODO MAYB NEXT | DONE CNCL
 
-* NEXT kendi asciisinator gemim
-** with using encode command/
-* MAYB more podcast searcher services
-* TODO add statisctics model 
-* TODO user profiles with friendly-id
-* TODO friendly in subscriptions url
-* MAYB friendly in contents url
+** MAYB kendi asciisinator gemim                                     :enhanc:
+*** with using encode command
+** MAYB more podcast searcher services
+** NEXT add statisctics model                                        :enhanc:
+** TODO add user details model
+   + rails g model user_details username:string country profilepicture
+** TODO sending greetings mail
+** TODO devise forgot password mail
+** MAYB user profiles                                                :enhanc:
+*** TODO user profiles with friendly-id
+*** TODO friendly in subscriptions url
+*** MAYB friendly in contents url
+** TODO welcome page ayarla                                          :featur:
+** TODO add secret recaptcha to login                                :featur:
+** TODO rspec with after_commit catchup sidekiq worker               :bugfix:
+   + [[file:spec/models/subscription_spec.rb::# TODO:][link to file]]
+** TODO static pages                                                 :enhanc:
+*** [[file:app/controllers/pages_controller.rb::# TODO][about page controller]]
+*** [[file:app/controllers/pages_controller.rb::def contact][contact page controller]]
+** TODO sidekiq specs
+  + https://github.com/philostler/rspec-sidekiq
+** TODO api support                                                  :enhanc:
+***  https://github.com/ruby-grape/grape
+** TODO add media player (o_O)
+** TODO 404 page
+https://images.pexels.com/photos/2523376/pexels-photo-2523376.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
 
-* TODO welcome page ayarla
+** TODO seo meta data cart curt
 
-* TODO cok bolumu olan podcaste uye olunca butun bolumleri yerine son 10 bolum? sneakpeekte de olabilir bu
-* https://stackoverflow.com/questions/8751175/skip-callbacks-on-factory-girl-and-rspec
+** TODO write test [[file:app/services/sneak_peeker.rb::def grab_from_db][to this func]]
+** TODO use sneek peaker as worker
+* ARCHIVED
+** DONE sidekiq job every hour update                               :ARCHIVE:
+** DONE sidekiq job first time subscription update                  :ARCHIVE:
+** DONE activeadmin yukle                                           :ARCHIVE:
+** DONE cok bolumu olan podcaste uye olunca butun bolumleri yerine son 10 bolum? sneakpeekte de olabilir bu :ARCHIVE:
+   
+* links and snippets
+** https://stackoverflow.com/questions/8751175/skip-callbacks-on-factory-girl-and-rspec
 
-* TODO after create ile ilk basta da okntrol ediyor content spec't
-* sidekiq job first time subscriptopn update
-* sidekiq job every hour udate
-  
-* TODO activeadmin yukle
-* [[file:app/controllers/pages_controller.rb::# TODO][about page controller]]
-* [[file:app/controllers/pages_controller.rb::def contact][contact page controller]]
-
+* [[file:app/controllers/subscriptions_controller.rb::def show][show me]]
 
