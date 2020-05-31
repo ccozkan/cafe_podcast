@@ -18,11 +18,13 @@ gem 'devise'
 gem 'feedjira'
 gem 'httparty'
 gem 'ascii'
-gem 'bootstrap'
-gem 'plyr-rails'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'activeadmin'
+gem 'will_paginate', '~> 3.3.0'
+gem 'bootstrap', '~> 4.5.0'
+gem 'jquery-rails'
+gem "font-awesome-rails"
 
 
 group :development, :test do
