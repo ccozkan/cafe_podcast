@@ -3,21 +3,21 @@
 class SneakPeeker
   attr_reader :url
 
+  # TODO: use sneakpeeker as worker
+
   def initialize(url)
     @url = url
   end
 
   def call
     db_source = Subscription.find_by(url: @url)
-    return db_source.contents[-10..-1] if !db_source.nil? && db_source.length > 0
+    return db_source.contents[-10..-1] if !db_source.nil? && !db_source.contents.empty?
 
     response = web_source
     return [] if response.nil?
 
     response
   end
-
-  # TODO: use sneakpeeker as worker
 
   def web_source
     feed = FeedReceiver.call(@url)
