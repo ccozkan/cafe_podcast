@@ -27,7 +27,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def destroy
-    @subscription = Subscription.find(params[:id])
+    @subscription = current_user.subscriptions.friendly.find_by_slug(params[:slug])
     @subscription.destroy
     redirect_to subscriptions_path
   end
@@ -35,7 +35,8 @@ class SubscriptionsController < ApplicationController
   def show
     # TODO:
     # add pagination
-    @subscription = current_user.subscriptions.find_by(id: params[:id])
+    @subscription = current_user.subscriptions.friendly.find_by_slug(params[:slug])
     @contents = @subscription.contents.reverse
+    @contents = @contents.paginate(page: params[:page])
   end
 end

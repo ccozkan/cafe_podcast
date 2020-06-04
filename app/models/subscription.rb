@@ -7,7 +7,12 @@ class Subscription < ApplicationRecord
                                      message: "user podcast is already subscribed"}
   after_commit :first_time_catch_up, on: :create
 
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+
   def first_time_catch_up
-    SubscriptionCatchUpWorker.perform_async(user.id, url)
+    user = User.find_by(id: user_id)
+    User.update_subscribed_podcasts(user, url)
+    #SubscriptionCatchUpWorker.perform_async(user.id, url)
   end
 end
