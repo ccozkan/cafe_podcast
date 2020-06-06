@@ -1,0 +1,12 @@
+<div class="container">
+
+<%= will_paginate @subscriptions %>
+<% @subscriptions.each do |s| %>
+    <h4>
+        <%= s.name %>
+    </h4>
+    <%= raw s.description %>
+    <%= link_to "go!", subscription_path(s.slug), method: :get, class: "btn btn-info" %>
+    <% end %>
+
+</div>

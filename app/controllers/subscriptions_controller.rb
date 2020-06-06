@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require 'will_paginate/array'
+
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @subscriptions = current_user.subscriptions
+    @subscriptions = current_user.subscriptions.paginate(page: params[:page])
   end
 
   def create

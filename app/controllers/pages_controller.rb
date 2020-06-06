@@ -18,6 +18,6 @@ class PagesController < ApplicationController
   private
 
   def pages_params
-    params.permit(:query, :url, :authenticity_token)
+    params.permit(:query, :url)
   end
 end
