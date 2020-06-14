@@ -10,8 +10,8 @@ class SneakPeeker
   end
 
   def call
-    db_source = Subscription.find_by(url: @url)
-    return db_source.contents[-10..-1] if !db_source.nil? && !db_source.contents.empty?
+    db_source = Podcast.find_by(url: @url)
+    return db_source.episodes[-10..-1] if !db_source.nil? && !db_source.episodes.empty?
 
     response = web_source
     return [] if response.nil?

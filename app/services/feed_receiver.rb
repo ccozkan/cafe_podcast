@@ -2,9 +2,16 @@
 
 class FeedReceiver
   def self.call(url)
-    xml = HTTParty.get(url).body
-    feed = Feedjira.parse(xml, parser: Feedjira::Parser::ITunesRSS)
-    feed.entries.sort_by!(&:published).reverse!
-    feed
+    begin
+      response = HTTParty.get(url)
+      if response.success?
+        xml = response.body
+        feed = Feedjira.parse(xml, parser: Feedjira::Parser::ITunesRSS)
+        feed.entries.sort_by!(&:published).reverse!
+        feed
+      end
+    rescue
+      'some error'
+    end
   end
 end
