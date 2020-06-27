@@ -7,7 +7,7 @@ class CreatePodcasts < ActiveRecord::Migration[6.0]
       t.string :media_url
       t.date :last_publish_date
       t.integer :number_of_episodes
-      t.integer :added_by
+      t.references :original_adder, foreign_key: { to_table: :users }
       t.text :categories, array: true, default: []
 
       t.timestamps

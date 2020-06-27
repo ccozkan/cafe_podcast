@@ -12,5 +12,5 @@ class User < ApplicationRecord
   has_many :interactions, dependent: :destroy
   has_many :episodes, through: :interactions
 
-  include UpdatePodcasts
+  has_many :added_podcasts, class_name: 'Podcast', foreign_key: 'adder_id'
 end
