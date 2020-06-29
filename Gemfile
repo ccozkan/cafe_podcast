@@ -15,6 +15,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 # cafe_podcast
 gem 'devise'
+gem 'friendly_id', '~> 5.2.4'
 gem 'feedjira'
 gem 'httparty'
 gem 'ascii'
