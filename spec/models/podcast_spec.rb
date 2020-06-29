@@ -10,7 +10,7 @@ RSpec.describe Podcast, type: :model do
 
   describe 'Successfull podcast ' do
     let(:current_user) { FactoryBot.build(:user)}
-    let(:podcast) { FactoryBot.create(:podcast, added_by: current_user.id, url: 'http://feeds.soundcloud.com/users/soundcloud:users:340197999/sounds.rss') }
+    let(:podcast) { FactoryBot.create(:podcast, original_adder_id: current_user.id, url: 'http://feeds.soundcloud.com/users/soundcloud:users:340197999/sounds.rss') }
     let(:podcast_2) { FactoryBot.create(:podcast, url: 'https://feeds.feedburner.com/ReverberationRadio') }
 
     before {
@@ -22,7 +22,7 @@ RSpec.describe Podcast, type: :model do
     context 'creation relationship' do
       it 'w/ added_by creates new sub' do
         expect(Subscription.find_by(podcast_id: podcast.id)).not_to eq nil
-        expect(Subscription.find_by(podcast_id: podcast.id).user_id).to eq podcast.added_by
+        expect(Subscription.find_by(podcast_id: podcast.id).user_id).to eq podcast.original_adder_id
       end
       it 'w/out added by doesnot create new sub' do
         expect(Subscription.find_by(podcast_id: podcast_2.id)).to eq nil
