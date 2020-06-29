@@ -1,0 +1,12 @@
+class CreateSubscriptions < ActiveRecord::Migration[6.0]
+  def change
+    create_table :subscriptions do |t|
+      t.references :podcast
+      t.references :user
+
+      t.boolean :is_favorite, default: false
+
+      t.timestamps
+    end
+  end
+end

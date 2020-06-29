@@ -4,8 +4,8 @@ class CreateInteractions < ActiveRecord::Migration[6.0]
       t.references :episode
       t.references :user
 
-      t.boolean :starred
-      t.boolean :listened
+      t.boolean :is_starred, default: false
+      t.boolean :is_listened, default: false
 
       t.timestamps
     end
