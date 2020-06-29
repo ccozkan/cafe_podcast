@@ -2,7 +2,7 @@ class Podcast < ApplicationRecord
   has_many :episodes
   has_many :subscriptions
   has_many :users, through: :subscriptions
-  has_one :original_adder, optional: true
+  has_one :original_adder
 
   validates :url, presence: true
   validates :url, uniqueness: true
@@ -27,8 +27,8 @@ class Podcast < ApplicationRecord
   end
 
   def subscribe_user
-    if self.added_by
-      sub = Subscription.new(user_id: self.added_by, podcast_id: self.id)
+    if self.original_adder_id
+      sub = Subscription.new(user_id: self.original_adder_id, podcast_id: self.id)
       sub.save!
     end
   end
