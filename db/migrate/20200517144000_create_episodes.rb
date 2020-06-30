@@ -12,5 +12,7 @@ class CreateEpisodes < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+    add_index :episodes, :url, unique: true
+    add_index :episodes, :entry_id, unique: true
   end
 end
