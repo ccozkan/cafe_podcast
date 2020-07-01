@@ -11,21 +11,16 @@ class SneakPeeker
 
   def call
     db_source = Podcast.find_by(url: @url)
-    return db_source.episodes[-10..-1] if !db_source.nil? && !db_source.episodes.empty?
+    return db_source.episodes[-10..-1] || db_source.episodes.all if db_source && db_source.episodes.present?
 
-    response = web_source
-    return [] if response.nil?
-
-    response
+    if web_source
+      call
+    else
+      return []
+    end
   end
 
   def web_source
-    feed = FeedReceiver.call(@url)
-    results = []
-    first_entries = feed.entries[0...10]
-    first_entries.each do |con|
-      results << FeedParser.call(con)
-    end
-    results
+    PodcastUpdater.call(url: @url)
   end
 end
