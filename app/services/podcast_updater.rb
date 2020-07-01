@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
 class PodcastUpdater
-  def self.call(specific_url = nil)
-    if specific_url.present?
+  def self.call(url = nil)
+    if url.present?
       podcasts = []
-      podcasts << Podcast.create(url: specific_url, name: 'n/a')
+      podcast = Podcast.find_by(url: url[:url])
+      podcast = Podcast.create(url: url[:url], name: 'n/a') if podcast.nil?
+      podcasts << podcast
     else
       podcasts = Podcast.all
     end
 
     podcasts.each do |p|
       feed = FeedReceiver.call(p.url)
-      next if feed.entries.length == Podcast.find_by(url: p.url)
+      next if feed.entries && feed.entries.length == Podcast.find_by(url: p.url)
                                             .try(:number_of_episodes)
 
       feed.entries.each do |e|
