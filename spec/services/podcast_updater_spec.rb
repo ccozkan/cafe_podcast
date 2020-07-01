@@ -1,8 +1,11 @@
 # coding: utf-8
 require 'rails_helper'
 
-Podcast.destroy_all
 RSpec.describe PodcastUpdater, type: :service do
+  before do
+    Podcast.destroy_all
+  end
+
   describe 'update podcasts' do
     let!(:podcast) { FactoryBot.create(:podcast, url: 'http://feeds.soundcloud.com/users/soundcloud:users:340197999/sounds.rss') }
 
@@ -14,7 +17,7 @@ RSpec.describe PodcastUpdater, type: :service do
       expect(podcast.episodes.count).to be > 0
     end
 
-    it 'retrieves episodes at first run' do
+    it 'retrieves podcast info at first run' do
       expect(podcast.reload.name).to eq 'Üç Aşağı Beş Yukarı'
     end
 
@@ -35,6 +38,19 @@ RSpec.describe PodcastUpdater, type: :service do
 
       PodcastUpdater.call
       expect(podcast.reload.name).to eq 'Üç Aşağı Beş Yukarı'
+    end
+  end
+
+  describe 'update specific podcast' do
+    it 'successful' do
+      url = 'http://feeds.soundcloud.com/users/soundcloud:users:340197999/sounds.rss'
+      PodcastUpdater.call(url: url)
+      expect(Podcast.find_by(url: url)).not_to eq nil
+    end
+
+    it 'bad url' do
+      # TODO
+      url = 'https://feed.coolpodcast.test'
     end
   end
 end
