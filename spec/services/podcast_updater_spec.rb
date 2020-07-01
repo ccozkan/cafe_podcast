@@ -48,9 +48,13 @@ RSpec.describe PodcastUpdater, type: :service do
       expect(Podcast.find_by(url: url)).not_to eq nil
     end
 
-    it 'bad url' do
-      # TODO
-      url = 'https://feed.coolpodcast.test'
-    end
+    pending "sorting episodes chronologically before save"
+    # maybe use reverberation radio
+
+    pending "bad url"
+    # it 'bad url' do
+    #   # TODO
+    #   url = 'https://feed.coolpodcast.test'
+    # end
   end
 end
