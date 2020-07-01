@@ -52,7 +52,9 @@ ActiveRecord::Schema.define(version: 2020_06_07_082413) do
     t.bigint "podcast_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["entry_id"], name: "index_episodes_on_entry_id", unique: true
     t.index ["podcast_id"], name: "index_episodes_on_podcast_id"
+    t.index ["url"], name: "index_episodes_on_url", unique: true
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -78,9 +80,9 @@ ActiveRecord::Schema.define(version: 2020_06_07_082413) do
   end
 
   create_table "podcasts", force: :cascade do |t|
+    t.string "url"
     t.string "name"
     t.text "description"
-    t.string "url"
     t.string "media_url"
     t.date "last_publish_date"
     t.integer "number_of_episodes"
@@ -91,6 +93,7 @@ ActiveRecord::Schema.define(version: 2020_06_07_082413) do
     t.string "slug"
     t.index ["original_adder_id"], name: "index_podcasts_on_original_adder_id"
     t.index ["slug"], name: "index_podcasts_on_slug", unique: true
+    t.index ["url"], name: "index_podcasts_on_url", unique: true
   end
 
   create_table "subscriptions", force: :cascade do |t|
