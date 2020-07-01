@@ -1,5 +1,5 @@
 class Podcast < ApplicationRecord
-  has_many :episodes
+  has_many :episodes, dependent: :destroy
   has_many :subscriptions
   has_many :users, through: :subscriptions
   has_one :original_adder
@@ -15,6 +15,10 @@ class Podcast < ApplicationRecord
 
   def slug_candidate
     self.name.gsub(/\P{ASCII}/, '').downcase
+  end
+
+  def should_generate_new_friendly_id?
+    name_changed?
   end
 
   def cool_abbreviation

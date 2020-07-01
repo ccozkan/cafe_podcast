@@ -6,6 +6,17 @@ RSpec.describe Podcast, type: :model do
       it { is_expected.to have_many(:episodes) }
       it { is_expected.to have_many(:users).through(:subscriptions)}
     end
+
+    context 're-slugging' do
+      let(:podcast) { FactoryBot.create(:podcast, name: 'el-podcasto') }
+      it 'when name changes' do
+        expect(podcast.slug).to eq 'el-podcasto'
+        podcast.name = 'nuevo'
+        podcast.save
+
+        expect(podcast.slug).to eq 'nuevo'
+      end
+    end
   end
 
   describe 'Successfull podcast ' do
