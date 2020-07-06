@@ -9,5 +9,6 @@ class CreateInteractions < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+    add_index :interactions, [:episode_id, :user_id], unique: true
   end
 end
