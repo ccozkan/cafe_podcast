@@ -5,6 +5,11 @@ RSpec.describe Subscription, type: :model do
     context '#validations' do
       it { is_expected.to belong_to(:user) }
       it { is_expected.to belong_to(:podcast) }
+
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:podcast) { FactoryBot.create(:podcast) }
+      let!(:subscription) { FactoryBot.create(:subscription, user_id: user.id, podcast_id: podcast.id) }
+      it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:podcast_id) }
     end
   end
 
